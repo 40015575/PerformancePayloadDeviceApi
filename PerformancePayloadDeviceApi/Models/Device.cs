@@ -8,6 +8,7 @@ namespace PerformancePayloadDeviceApi.Models
     {
         [JsonIgnore]
         public ObjectId Id { get; set; }
+        public int MyId { get; set; }
         public string DeviceName { get; set; }
         public string DeviceType { get; set; }
         public string DeviceProperty { get; set; }

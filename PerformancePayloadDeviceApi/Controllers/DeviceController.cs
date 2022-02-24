@@ -28,20 +28,18 @@ namespace PerformancePayloadDeviceApi.Controllers
             return new JsonResult(a);
         }
         [HttpGet("dev")]
-        public ActionResult GetDevice(string Dev)
+        public ActionResult GetDevice(int Dev)
         {
            
             MongoClient db = new MongoClient(_configuration.GetConnectionString("MongoDBConnection"));
             var result = db.GetDatabase("config").GetCollection<Device>("device").AsQueryable();
 
+            var Dev1=Dev.ToString();
 
 
-
-            if (!string.IsNullOrEmpty(Dev))
+            if (!string.IsNullOrEmpty(Dev1))
             {
-                result = result
-                       .Where(m => m.DeviceName.Contains(Dev)
-                      );
+                result = result.Where(m => m.MyId.Equals(Dev));
                 return new JsonResult(result);
             }
             else
