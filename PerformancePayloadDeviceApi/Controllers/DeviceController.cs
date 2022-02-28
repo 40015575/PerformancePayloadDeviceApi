@@ -4,6 +4,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using PerformancePayloadDeviceApi.Models;
+using PerformancePayloadDeviceApi.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,32 +23,17 @@ namespace PerformancePayloadDeviceApi.Controllers
         [HttpGet]
         public JsonResult GetAsync()
         {
-            MongoClient db = new MongoClient(_configuration.GetConnectionString("MongoDBConnection"));
-
-            var a = db.GetDatabase("config").GetCollection<Device>("device").AsQueryable();
-            return new JsonResult(a);
+            DeviceService ds = new DeviceService(_configuration);
+            var b=ds.GetAllDevices();
+            return new JsonResult(b);
         }
         [HttpGet("dev")]
         public ActionResult GetDevice(int Dev)
         {
+            DeviceService ds = new DeviceService(_configuration);
+            var result=ds.deviceById(Dev);
+            return new JsonResult(result);
            
-            MongoClient db = new MongoClient(_configuration.GetConnectionString("MongoDBConnection"));
-            var result = db.GetDatabase("config").GetCollection<Device>("device").AsQueryable();
-
-            var Dev1=Dev.ToString();
-
-
-            if (!string.IsNullOrEmpty(Dev1))
-            {
-                result = result.Where(m => m.MyId.Equals(Dev));
-                return new JsonResult(result);
-            }
-            else
-                return NotFound();
-
-            
-
-
         }
         
     }
